@@ -30,13 +30,18 @@ import java.util.List;
  */
 public class ClassifierValidator {
     private static final Logger LOG = LoggerFactory.getLogger(ClassifierValidator.class);
+    private final String srcDir;
+    private final String modelPath;
 
-    private static final String PROD_DIR = "./productsEN";
+    public ClassifierValidator(String srcDir, String modelPath) {
+        this.srcDir = srcDir;
+        this.modelPath = modelPath;
+    }
 
-    public static void main(String[] args) throws IOException {
-        NaiveBayesModel model = NaiveBayesSerializer.readFrom("./model/cbayes.json");
+    public void validate() throws IOException {
+        NaiveBayesModel model = NaiveBayesSerializer.readFrom(modelPath);
         DocumentClassifier classifier = new WeightNormalizedComplementNaiveBayes(model);
-        List<Document> testSet = prepareTestSet(PROD_DIR);
+        List<Document> testSet = prepareTestSet(srcDir);
         checkAccuracy(classifier, testSet);
     }
 

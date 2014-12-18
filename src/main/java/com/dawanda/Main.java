@@ -3,12 +3,15 @@ package com.dawanda;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import com.dawanda.classifier.ClassifierTrainer;
+
+import java.io.IOException;
 
 /**
  * Created by awolny on 18/12/14.
  */
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         ClassifierOptions options = new ClassifierOptions();
         JCommander jCommander = new JCommander(options);
         try {
@@ -19,23 +22,35 @@ public class Main {
             System.exit(1);
         }
 
-        // TODO:
+        switch (options.command) {
+            case "train":
+                new ClassifierTrainer(options.inputDir, options.outputModel).train();
+                break;
+            case "validate":
+                new ClassifierValidator(options.inputDir, options.outputModel).validate();
+                break;
+            case "label":
+                throw new IllegalArgumentException();
+            default:
+                throw new IllegalArgumentException("Invalid command: " + options.command);
+        }
     }
 
     static class ClassifierOptions {
-        @Parameter(names = {"-c", "--command"}, required = true, description = "Command for the classifier, can be 'train' for training or 'label' for label assignment")
-        public String command = "train";
+        private static final String HOME_DIR = System.getProperty("user.home");
+        @Parameter(names = {"-c", "--command"}, required = true, description = "Command for the classifier, can be 'train' for training, 'label' for label assignment, or 'validate' for validating the classifier accuracy")
+        public String command;
 
-        @Parameter(names = {"-it", "--inputTrain"}, description = "Input directory containing product files for training")
-        public String inputTrain = "~/.cbayes/products";
+        @Parameter(names = {"-id", "--inputDir"}, description = "Input directory containing product files for training or testing/validation")
+        public String inputDir = HOME_DIR + "/.cbayes/products";
 
         @Parameter(names = {"-il", "--inputLabel"}, description = "Input directory containing product files for labeling")
-        public String inputLabel = "~/.cbayes/test";
+        public String inputLabel = HOME_DIR + "/.cbayes/test";
 
         @Parameter(names = {"-om", "--outputModel"}, description = "Output file for the model")
-        public String outputModel = "~/.cbayes/model.json";
+        public String outputModel = HOME_DIR + "/.cbayes/model.json";
 
         @Parameter(names = {"-ol", "--outputLabel"}, description = "Input directory containing product files for labeling")
-        public String labelResult = "~/.cbayes/labelResult.json";
+        public String labelResult = HOME_DIR + "/.cbayes/labelResult.json";
     }
 }

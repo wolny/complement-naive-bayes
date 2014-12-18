@@ -23,4 +23,11 @@ public class RandomSubsetFilter implements ProductFilter {
         Collections.shuffle(products);
         return Lists.newArrayList(Iterables.limit(products, subsetSize));
     }
+
+    @Override
+    public String toString() {
+        return "RandomSubsetFilter{" +
+                "fraction=" + fraction +
+                '}';
+    }
 }

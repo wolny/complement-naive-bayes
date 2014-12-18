@@ -56,9 +56,10 @@ public class ProductFilterPipeline {
 
     // assumes that there is one file per category and fetches all the products
     private List<Product> readFromSourceDir(String srcDir) {
-        LOG.info(String.format("Reading product files from: '%s' ...", srcDir));
+        File dir = new File(srcDir);
+        LOG.info(String.format("Reading product files from: '%s' ...", dir.toString()));
         List<Product> result = new ArrayList<>();
-        for (File file : new File(srcDir).listFiles()) { // for all the categories
+        for (File file : dir.listFiles()) { // for all the categories
             if (!file.getName().endsWith("json")) {
                 continue;
             }

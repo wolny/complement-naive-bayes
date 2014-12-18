@@ -53,4 +53,11 @@ public class SameSellerFilter implements ProductFilter {
         }
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "SameSellerFilter{" +
+                "maxProductCountPerSellerPerCategory=" + maxProductCountPerSellerPerCategory +
+                '}';
+    }
 }
