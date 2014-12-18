@@ -16,7 +16,7 @@ public class FeatureExtractorTest {
     public void titleFeatureExtractorTest() {
         FeatureExtractor extractor = new TitleFeatureExtractor();
         Document document = extractor.extractFeatureVectors(Arrays.asList(getSampleProduct())).get(0);
-        Assert.assertTrue(document.contains("vintage"));
+        Assert.assertTrue(document.contains("vintag"));
         Assert.assertTrue(document.contains("trimmer"));
         Assert.assertEquals(2, document.getWordCount("trimmer"));
     }
