@@ -1,0 +1,11 @@
+*.iml
+*.ipr
+*.iws
+.idea/
+.gradle/
+out/
+build/
+productsDE/
+productsEN/
+db.properties
+prodEN.zip
