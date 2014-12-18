@@ -1,6 +1,5 @@
 package com.dawanda.db;
 
-import com.google.common.base.Preconditions;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
@@ -20,10 +19,6 @@ public class Product {
                    @JsonProperty("category") int category,
                    @JsonProperty("title") String title,
                    @JsonProperty("description") String description) {
-        Preconditions.checkNotNull(description);
-        Preconditions.checkNotNull(title);
-        Preconditions.checkArgument(id > 0);
-        Preconditions.checkArgument(category > 0);
         this.id = id;
         this.sellerId = sellerId;
         this.category = category;
@@ -53,6 +48,12 @@ public class Product {
 
     @Override
     public String toString() {
-        return String.format(">> id: %d\n>> category: %d\n>> title: %s\n>> description: %s", id, category, title, description);
+        return "Product{" +
+                "id=" + id +
+                ", category=" + category +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", sellerId=" + sellerId +
+                '}';
     }
 }
