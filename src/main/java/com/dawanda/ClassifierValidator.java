@@ -49,12 +49,14 @@ public class ClassifierValidator {
         ProductFilter filter = new RandomSubsetFilter(0.05);
         ProductFilterPipeline pipeline = new ProductFilterPipeline(Arrays.asList(filter));
         List<Product> products = pipeline.filterProducts(prodDir);
+        LOG.info("Test set size: " + products.size());
         return Extractors.STANDARD_EXTRACTOR.extractFeatureVectors(products);
     }
 
     private static void checkAccuracy(DocumentClassifier classifier, List<Document> testSet) {
         Multiset<Category> success = HashMultiset.create();
         Multiset<Category> all = HashMultiset.create();
+        LOG.info(String.format("Labeling %d test documents...", testSet.size()));
         for (Document document : testSet) {
             LabelingResult labelingResult = classifier.label(document);
             Category category = document.getCategory();
@@ -64,7 +66,7 @@ public class ClassifierValidator {
             if (isCorrectlyLabeled(document, labelingResult)) {
                 success.add(category);
             } else {
-                LOG.info("Classification failed for document: " + document.getId());
+                LOG.debug("Incorrect label for document: " + document.getId());
             }
         }
         printAccuracy(success, all, testSet.size());
@@ -83,7 +85,7 @@ public class ClassifierValidator {
         LOG.info(">>>> Per-category Accuracy:");
         Collections.sort(perCategoryAcc);
         for (CategoryAcc catAcc : perCategoryAcc) {
-            LOG.info(catAcc.getCategory() + " : " + catAcc.getAccuracy());
+            LOG.info(catAcc.getCategory() + ", Accuracy: " + catAcc.getAccuracy());
         }
         double acc = successCount / (double) testSize;
         LOG.info(">>>> Overall Accuracy = " + acc + " <<<<");
