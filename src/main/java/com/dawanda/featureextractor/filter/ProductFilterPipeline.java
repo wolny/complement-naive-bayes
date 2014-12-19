@@ -1,14 +1,10 @@
 package com.dawanda.featureextractor.filter;
 
 import com.dawanda.db.Product;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
+import com.dawanda.utils.ProductSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,42 +38,6 @@ public class ProductFilterPipeline {
     }
 
     public List<Product> filterProducts(String srcDir) {
-        return filterProducts(readFromSourceDir(srcDir));
+        return filterProducts(ProductSerializer.readFromSourceDir(srcDir));
     }
-
-    public void writeToDestinationDir(List<Product> products, String destDir) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            objectMapper.writeValue(new File(destDir + "/filteredProducts.json"), products);
-        } catch (IOException e) {
-            LOG.error("Error while saving filteredProducts", e);
-        }
-    }
-
-    // assumes that there is one file per category and fetches all the products
-    private List<Product> readFromSourceDir(String srcDir) {
-        File dir = new File(srcDir);
-        LOG.info(String.format("Reading product files from: '%s' ...", dir.toString()));
-        List<Product> result = new ArrayList<>();
-        for (File file : dir.listFiles()) { // for all the categories
-            if (!file.getName().endsWith("json")) {
-                continue;
-            }
-            LOG.info("Processing file: " + file.getName());
-            try {
-                result.addAll(getProductsFromFile(file));
-            } catch (Exception e) {
-                LOG.error("Error processing file: " + file.getName(), e);
-            }
-        }
-        return result;
-    }
-
-
-    private List<Product> getProductsFromFile(File file) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(file, new TypeReference<List<Product>>() {
-        });
-    }
-
 }
