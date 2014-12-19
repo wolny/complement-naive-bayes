@@ -1,9 +1,7 @@
-package com.dawanda;
+package com.dawanda.classifier.naivebayes;
 
 import com.dawanda.classifier.DocumentClassifier;
 import com.dawanda.classifier.LabelingResult;
-import com.dawanda.classifier.naivebayes.NaiveBayesModel;
-import com.dawanda.classifier.naivebayes.WeightNormalizedComplementNaiveBayes;
 import com.dawanda.db.Product;
 import com.dawanda.document.Category;
 import com.dawanda.document.Document;

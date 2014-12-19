@@ -1,7 +1,5 @@
-package com.dawanda.classifier;
+package com.dawanda.classifier.naivebayes;
 
-import com.dawanda.classifier.naivebayes.NaiveBayesModel;
-import com.dawanda.classifier.naivebayes.WeightNormalizedComplementNaiveBayes;
 import com.dawanda.db.Product;
 import com.dawanda.document.Document;
 import com.dawanda.featureextractor.filter.ProductFilterPipeline;

@@ -3,7 +3,8 @@ package com.dawanda;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
-import com.dawanda.classifier.ClassifierTrainer;
+import com.dawanda.classifier.naivebayes.ClassifierTrainer;
+import com.dawanda.classifier.naivebayes.ClassifierValidator;
 
 import java.io.IOException;
 
