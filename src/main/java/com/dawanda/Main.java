@@ -25,13 +25,13 @@ public class Main {
 
         switch (options.command) {
             case "train":
-                new ClassifierTrainer(options.inputDir, options.outputModel).train();
+                new ClassifierTrainer(options.trainDir, options.outputModel).train();
                 break;
             case "validate":
-                new ClassifierValidator(options.inputDir, options.outputModel).validate(0.05);
+                new ClassifierValidator(options.testDir, options.outputModel).validate();
                 break;
             case "label":
-                new ClassifierValidator(options.inputLabel, options.outputModel).label(2);
+                new ClassifierValidator(options.testDir, options.outputModel).label(2);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid command: " + options.command);
@@ -43,11 +43,11 @@ public class Main {
         @Parameter(names = {"-c", "--command"}, required = true, description = "Command for the classifier, can be 'train' for training, 'label' for label assignment, or 'validate' for validating the classifier accuracy")
         public String command;
 
-        @Parameter(names = {"-id", "--inputDir"}, description = "Input directory containing product files for training or testing/validation")
-        public String inputDir = HOME_DIR + "/.cbayes/products";
+        @Parameter(names = {"-id", "--trainDir"}, description = "Input directory containing product files for training")
+        public String trainDir = HOME_DIR + "/.cbayes/train";
 
-        @Parameter(names = {"-il", "--inputLabel"}, description = "Input directory containing product files for labeling")
-        public String inputLabel = HOME_DIR + "/.cbayes/test";
+        @Parameter(names = {"-il", "--testDir"}, description = "Input directory containing product files for labeling")
+        public String testDir = HOME_DIR + "/.cbayes/test";
 
         @Parameter(names = {"-om", "--outputModel"}, description = "Output file for the model")
         public String outputModel = HOME_DIR + "/.cbayes/model.json";

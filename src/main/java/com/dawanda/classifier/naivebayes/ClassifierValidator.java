@@ -5,9 +5,6 @@ import com.dawanda.classifier.LabelingResult;
 import com.dawanda.db.Product;
 import com.dawanda.document.Category;
 import com.dawanda.document.Document;
-import com.dawanda.featureextractor.filter.ProductFilter;
-import com.dawanda.featureextractor.filter.ProductFilterPipeline;
-import com.dawanda.featureextractor.filter.RandomSubsetFilter;
 import com.dawanda.utils.Extractors;
 import com.dawanda.utils.NaiveBayesSerializer;
 import com.dawanda.utils.ProductSerializer;
@@ -22,7 +19,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,14 +41,13 @@ public class ClassifierValidator {
      * Validates the classifier by measuring overall and per class accuracy.
      * Results are printed via configured logger.
      *
-     * @param fractionOfProducts fraction of products from the {@code srcDir} to be taken for testing
      * @throws IOException
      */
-    public void validate(double fractionOfProducts) throws IOException {
-        DocumentClassifier classifier = createClassifier();
-        List<Product> products = prepareTestSet(srcDir, fractionOfProducts);
+    public void validate() throws IOException {
+        List<Product> products = ProductSerializer.readFromSourceDir(srcDir);
+        LOG.info("Test set size: " + products.size());
         List<Document> testSet = extractFeatures(products);
-        checkAccuracy(classifier, testSet);
+        checkAccuracy(createClassifier(), testSet);
     }
 
     /**
@@ -62,10 +57,10 @@ public class ClassifierValidator {
      * @throws IOException
      */
     public void label(int maxLabels) throws IOException {
-        DocumentClassifier classifier = createClassifier();
         List<Product> products = ProductSerializer.readFromSourceDir(srcDir);
+        LOG.info("Test set size: " + products.size());
         List<Document> toBeLabeled = extractFeatures(products);
-        printLabels(classifier, toBeLabeled, maxLabels);
+        printLabels(createClassifier(), toBeLabeled, maxLabels);
     }
 
     private void printLabels(DocumentClassifier classifier, List<Document> toBeLabeled, int maxLabels) {
@@ -80,14 +75,6 @@ public class ClassifierValidator {
     private DocumentClassifier createClassifier() throws IOException {
         NaiveBayesModel model = NaiveBayesSerializer.readFrom(modelPath);
         return new WeightNormalizedComplementNaiveBayes(model);
-    }
-
-    private List<Product> prepareTestSet(String prodDir, double fractionOfProducts) {
-        ProductFilter filter = new RandomSubsetFilter(fractionOfProducts);
-        ProductFilterPipeline pipeline = new ProductFilterPipeline(Arrays.asList(filter));
-        List<Product> products = pipeline.filterProducts(prodDir);
-        LOG.info("Test set size: " + products.size());
-        return products;
     }
 
     private List<Document> extractFeatures(List<Product> products) {
