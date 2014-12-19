@@ -28,10 +28,11 @@ public class Main {
                 new ClassifierTrainer(options.inputDir, options.outputModel).train();
                 break;
             case "validate":
-                new ClassifierValidator(options.inputDir, options.outputModel).validate();
+                new ClassifierValidator(options.inputDir, options.outputModel).validate(0.05);
                 break;
             case "label":
-                throw new IllegalArgumentException();
+                new ClassifierValidator(options.inputLabel, options.outputModel).label(2);
+                break;
             default:
                 throw new IllegalArgumentException("Invalid command: " + options.command);
         }
@@ -50,8 +51,5 @@ public class Main {
 
         @Parameter(names = {"-om", "--outputModel"}, description = "Output file for the model")
         public String outputModel = HOME_DIR + "/.cbayes/model.json";
-
-        @Parameter(names = {"-ol", "--outputLabel"}, description = "Input directory containing product files for labeling")
-        public String labelResult = HOME_DIR + "/.cbayes/labelResult.json";
     }
 }

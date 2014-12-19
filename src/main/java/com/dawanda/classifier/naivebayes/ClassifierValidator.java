@@ -10,9 +10,12 @@ import com.dawanda.featureextractor.filter.ProductFilterPipeline;
 import com.dawanda.featureextractor.filter.RandomSubsetFilter;
 import com.dawanda.utils.Extractors;
 import com.dawanda.utils.NaiveBayesSerializer;
+import com.dawanda.utils.ProductSerializer;
+import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Multiset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,26 +35,66 @@ public class ClassifierValidator {
     private final String modelPath;
 
     public ClassifierValidator(String srcDir, String modelPath) {
+        Preconditions.checkNotNull(srcDir);
+        Preconditions.checkNotNull(modelPath);
         this.srcDir = srcDir;
         this.modelPath = modelPath;
     }
 
-    public void validate() throws IOException {
-        NaiveBayesModel model = NaiveBayesSerializer.readFrom(modelPath);
-        DocumentClassifier classifier = new WeightNormalizedComplementNaiveBayes(model);
-        List<Document> testSet = prepareTestSet(srcDir);
+    /**
+     * Validates the classifier by measuring overall and per class accuracy.
+     * Results are printed via configured logger.
+     *
+     * @param fractionOfProducts fraction of products from the {@code srcDir} to be taken for testing
+     * @throws IOException
+     */
+    public void validate(double fractionOfProducts) throws IOException {
+        DocumentClassifier classifier = createClassifier();
+        List<Product> products = prepareTestSet(srcDir, fractionOfProducts);
+        List<Document> testSet = extractFeatures(products);
         checkAccuracy(classifier, testSet);
     }
 
-    private static List<Document> prepareTestSet(String prodDir) {
-        ProductFilter filter = new RandomSubsetFilter(0.05);
+    /**
+     * Labels products from {@code srcDir}. Shows best {@code maxLabels} categories for a given product.
+     *
+     * @param maxLabels how many top categories to show for a given product
+     * @throws IOException
+     */
+    public void label(int maxLabels) throws IOException {
+        DocumentClassifier classifier = createClassifier();
+        List<Product> products = ProductSerializer.readFromSourceDir(srcDir);
+        List<Document> toBeLabeled = extractFeatures(products);
+        printLabels(classifier, toBeLabeled, maxLabels);
+    }
+
+    private void printLabels(DocumentClassifier classifier, List<Document> toBeLabeled, int maxLabels) {
+        for (Document document : toBeLabeled) {
+            LabelingResult labelingResult = classifier.label(document);
+            List<LabelingResult.ScoredCategory> topCategories = Lists.newArrayList(Iterables.limit(labelingResult.getOrderedCategories(), maxLabels));
+            String result = String.format("Document %s -> %s", document.getId(), topCategories.toString());
+            LOG.info(result);
+        }
+    }
+
+    private DocumentClassifier createClassifier() throws IOException {
+        NaiveBayesModel model = NaiveBayesSerializer.readFrom(modelPath);
+        return new WeightNormalizedComplementNaiveBayes(model);
+    }
+
+    private List<Product> prepareTestSet(String prodDir, double fractionOfProducts) {
+        ProductFilter filter = new RandomSubsetFilter(fractionOfProducts);
         ProductFilterPipeline pipeline = new ProductFilterPipeline(Arrays.asList(filter));
         List<Product> products = pipeline.filterProducts(prodDir);
         LOG.info("Test set size: " + products.size());
+        return products;
+    }
+
+    private List<Document> extractFeatures(List<Product> products) {
         return Extractors.STANDARD_EXTRACTOR.extractFeatureVectors(products);
     }
 
-    private static void checkAccuracy(DocumentClassifier classifier, List<Document> testSet) {
+    private void checkAccuracy(DocumentClassifier classifier, List<Document> testSet) {
         Multiset<Category> success = HashMultiset.create();
         Multiset<Category> all = HashMultiset.create();
         LOG.info(String.format("Labeling %d test documents...", testSet.size()));
@@ -70,7 +113,7 @@ public class ClassifierValidator {
         printAccuracy(success, all, testSet.size());
     }
 
-    private static void printAccuracy(Multiset<Category> success, Multiset<Category> all, int testSize) {
+    private void printAccuracy(Multiset<Category> success, Multiset<Category> all, int testSize) {
         int successCount = 0;
         List<CategoryAcc> perCategoryAcc = new ArrayList<>();
         for (Category category : all.elementSet()) {
@@ -89,7 +132,7 @@ public class ClassifierValidator {
         LOG.info(">>>> Overall Accuracy = " + acc + " <<<<");
     }
 
-    private static boolean isCorrectlyLabeled(final Document document, LabelingResult labelingResult) {
+    private boolean isCorrectlyLabeled(final Document document, LabelingResult labelingResult) {
         int limit = 3; // take first 3 categories
         Iterable<LabelingResult.ScoredCategory> topLabels = Iterables.limit(labelingResult.getOrderedCategories(), limit);
         return Iterables.any(topLabels, new Predicate<LabelingResult.ScoredCategory>() {
@@ -100,7 +143,7 @@ public class ClassifierValidator {
         });
     }
 
-    private static class CategoryAcc implements Comparable<CategoryAcc> {
+    static class CategoryAcc implements Comparable<CategoryAcc> {
         private final Category category;
         private final double accuracy;
 

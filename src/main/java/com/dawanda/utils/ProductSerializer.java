@@ -22,7 +22,11 @@ public class ProductSerializer {
         File dir = new File(srcDir);
         LOG.info(String.format("Reading product files from: '%s' ...", dir.toString()));
         List<Product> result = new ArrayList<>();
-        for (File file : dir.listFiles()) { // for all the categories
+        File[] files = dir.listFiles();
+        if (files == null) {
+            throw new IllegalArgumentException("No product files in " + dir);
+        }
+        for (File file : files) { // for all the categories
             if (!file.getName().endsWith("json")) {
                 continue;
             }
