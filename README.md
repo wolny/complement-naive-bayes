@@ -75,6 +75,8 @@ the following JSON schema:
 * For training _categoryId, title, description, sellerId_ attributes are obligatory, _sellerId_ is needed to filter
 products of the same seller from a given category in order to avoid _Seller Bias_.
 * For testing only _title, description_ attributes are necessary.
+* For now only English language is supported, but it's very easy to add support for other languages, all one has
+to do is create _Tokenizer_ for a given language and train the model using this _Tokenizer_.
 
 ### API
 
