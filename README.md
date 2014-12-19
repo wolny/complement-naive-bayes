@@ -79,4 +79,30 @@ products of the same seller from a given category in order to avoid _Seller Bias
 to do is create _Tokenizer_ for a given language and train the model using this _Tokenizer_.
 
 ### API
+The follwing snippet of code show how to use already trained model in order to label a sample product:
+```
+// read Naive Bayes model from JSON file
+String pathToModel = "./model.json";
+NaiveBayesModel model = NaiveBayesSerializer.readFrom(pathToModel);
+
+// create Complement Naive Bayes classifier
+DocumentClassifier classifier = new WeightNormalizedComplementNaiveBayes(model);
+
+// get the title and description of the product which is to be labeled
+String title = "...";
+String description = "...";
+String text = title + " " + description;
+
+// extract features, MAKE SURE THE SAME EXTRACTOR WAS USED DURING TRAINING PHASE
+Document document = Extractors.STANDARD_EXTRACTOR.extractFeatureVector(text);
+
+// label document
+LabelingResult labelingResult = classifier.label(document);
+
+// get categories ordered by score
+List<LabelingResult.ScoredCategory> categories = labelingResult.getOrderedCategories();
+
+// print 3 best category suggestions according to the model
+System.out.println(Lists.newArrayList(Iterables.limit(categories, 3)));
+```
 
