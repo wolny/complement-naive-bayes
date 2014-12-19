@@ -105,4 +105,4 @@ List<LabelingResult.ScoredCategory> categories = labelingResult.getOrderedCatego
 // print 3 best category suggestions according to the model
 System.out.println(Lists.newArrayList(Iterables.limit(categories, 3)));
 ```
-
+... or use [the following Play application](https://bitbucket.org/lfundaro/classifier-services)
