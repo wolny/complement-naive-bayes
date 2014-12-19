@@ -39,8 +39,19 @@ Usage: <main class> [options]
        Input directory containing product files for training
        Default: ~/.cbayes/train
 ```
-
-#### JSON input files
+* put your JSON train product files in _trainDir_ and train your model:
+```
+java -jar complement-naive-bayes-{version}.jar -c train --trainDir trainDir
+```
+* put your JSON test product files in _testDir_ and validate you model:
+```
+java -jar complement-naive-bayes-{version}.jar -c validate --testDir testDir
+```
+* put your JSON product files that you want to label in _testDir_ and label you products:
+```
+java -jar complement-naive-bayes-{version}.jar -c label --testDir testDir
+```
+#### JSON product files
 *trainDir*/*testDir* must contain product files in JSON format. Each file must contain list of products with
 the following JSON schema:
 ```
