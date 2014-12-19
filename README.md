@@ -29,13 +29,13 @@ Usage: <main class> [options]
   * -c, --command
        Command for the classifier, can be 'train' for training, 'label' for
        label assignment, or 'validate' for validating the classifier accuracy
-    -om, --outputModel
-       Output file for the model
+    -o, --outputModel
+       Output file for the model. Option valid only for training.
        Default: ~/.cbayes/model.json
-    -il, --testDir
-       Input directory containing product files for labeling
+    -te, --testDir
+       Input directory containing product files for labeling/validation
        Default: ~/.cbayes/test
-    -id, --trainDir
+    -tr, --trainDir
        Input directory containing product files for training
        Default: ~/.cbayes/train
 ```
