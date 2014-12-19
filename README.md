@@ -80,7 +80,7 @@ to do is create _Tokenizer_ for a given language and train the model using this 
 
 ### API
 The follwing snippet of code show how to use already trained model in order to label a sample product:
-```
+```java
 // read Naive Bayes model from JSON file
 String pathToModel = "./model.json";
 NaiveBayesModel model = NaiveBayesSerializer.readFrom(pathToModel);
