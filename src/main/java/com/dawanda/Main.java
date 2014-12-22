@@ -43,13 +43,13 @@ public class Main {
         @Parameter(names = {"-c", "--command"}, required = true, description = "Command for the classifier, can be 'train' for training, 'label' for label assignment, or 'validate' for validating the classifier accuracy")
         public String command;
 
-        @Parameter(names = {"-id", "--trainDir"}, description = "Input directory containing product files for training")
+        @Parameter(names = {"-tr", "--trainDir"}, description = "Input directory containing product files for training")
         public String trainDir = HOME_DIR + "/.cbayes/train";
 
-        @Parameter(names = {"-il", "--testDir"}, description = "Input directory containing product files for labeling")
+        @Parameter(names = {"-te", "--testDir"}, description = "Input directory containing product files for labeling")
         public String testDir = HOME_DIR + "/.cbayes/test";
 
-        @Parameter(names = {"-om", "--outputModel"}, description = "Output file for the model")
+        @Parameter(names = {"-o", "--outputModel"}, description = "Output file for the model")
         public String outputModel = HOME_DIR + "/.cbayes/model.json";
     }
 }
