@@ -3,6 +3,7 @@ package com.dawanda.document;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -16,10 +17,7 @@ public class DocumentImpl implements Document {
     private final Category category;
 
     public DocumentImpl(List<String> words, String id, Category cat) {
-        bagOfWords = HashMultiset.create();
-        for (String str : words) {
-            bagOfWords.add(str);
-        }
+        bagOfWords = HashMultiset.create(words);
         this.id = id;
         this.category = cat;
     }
@@ -51,12 +49,6 @@ public class DocumentImpl implements Document {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-        for (String str : this.bagOfWords.elementSet()) {
-            sb.append(String.format("(%s,%d),", str, this.getWordCount(str)));
-        }
-        sb.append("]");
-        return sb.toString();
+        return bagOfWords.toString();
     }
 }

@@ -14,7 +14,7 @@ or as a standalone command line application.
 In order to use *complement-naive-bayes* from command line:
 * clone the repo:
 ```
-git clone 
+git clone https://github.com/wolny/complement-naive-bayes.git
 ```
 * go to project dir and create executable jar
 ```

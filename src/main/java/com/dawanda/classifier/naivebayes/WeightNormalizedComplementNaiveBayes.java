@@ -30,7 +30,7 @@ public class WeightNormalizedComplementNaiveBayes implements DocumentClassifier 
     public NaiveBayesModel train(Collection<Document> documents) {
         Preconditions.checkArgument(naiveBayesModel == null, "Already trained!");
         LOG.info(String.format("Training Complement Naive Bayes with %d documents...", documents.size()));
-        List<DocumentTermFrequencies> transformedTermFrequencies = transformTermFrequencies(documents);
+        List<NormalizedTermFrequencies> transformedTermFrequencies = transformTermFrequencies(documents);
         naiveBayesModel = estimateModel(transformedTermFrequencies);
         return naiveBayesModel;
     }
@@ -57,7 +57,7 @@ public class WeightNormalizedComplementNaiveBayes implements DocumentClassifier 
         return naiveBayesModel;
     }
 
-    private NaiveBayesModel estimateModel(List<DocumentTermFrequencies> transformedTermFrequencies) {
+    private NaiveBayesModel estimateModel(List<NormalizedTermFrequencies> transformedTermFrequencies) {
         Map<Category, Double> perClassSum = new HashMap<>();
         Map<Category, Map<String, Double>> perClassPerTermSum = new HashMap<>();
         computePerClassSums(transformedTermFrequencies, perClassSum, perClassPerTermSum);
@@ -65,8 +65,8 @@ public class WeightNormalizedComplementNaiveBayes implements DocumentClassifier 
         return new NaiveBayesModel(weights);
     }
 
-    private void computePerClassSums(List<DocumentTermFrequencies> transformedTermFrequencies, Map<Category, Double> perClassSum, Map<Category, Map<String, Double>> perClassPerTermSum) {
-        for (DocumentTermFrequencies termFrequencies : transformedTermFrequencies) {
+    private void computePerClassSums(List<NormalizedTermFrequencies> transformedTermFrequencies, Map<Category, Double> perClassSum, Map<Category, Map<String, Double>> perClassPerTermSum) {
+        for (NormalizedTermFrequencies termFrequencies : transformedTermFrequencies) {
             updatePerClassSum(perClassSum, termFrequencies);
             updatePerClassPerTermSum(perClassPerTermSum, termFrequencies);
         }
@@ -153,7 +153,7 @@ public class WeightNormalizedComplementNaiveBayes implements DocumentClassifier 
         return new NaiveBayesModel.TermWeights(weights);
     }
 
-    private void updatePerClassSum(Map<Category, Double> perClassSum, DocumentTermFrequencies termFrequencies) {
+    private void updatePerClassSum(Map<Category, Double> perClassSum, NormalizedTermFrequencies termFrequencies) {
         Category category = termFrequencies.getDocument().getCategory();
         Double sum = perClassSum.get(category);
         if (sum == null) {
@@ -162,7 +162,7 @@ public class WeightNormalizedComplementNaiveBayes implements DocumentClassifier 
         perClassSum.put(category, sum + sumForDocument(termFrequencies));
     }
 
-    private void updatePerClassPerTermSum(Map<Category, Map<String, Double>> perClassPerTermSum, DocumentTermFrequencies termFrequencies) {
+    private void updatePerClassPerTermSum(Map<Category, Map<String, Double>> perClassPerTermSum, NormalizedTermFrequencies termFrequencies) {
         Category category = termFrequencies.getDocument().getCategory();
         Map<String, Double> map = perClassPerTermSum.get(category);
         if (map == null) {
@@ -174,24 +174,24 @@ public class WeightNormalizedComplementNaiveBayes implements DocumentClassifier 
             if (sum == null) {
                 sum = 0.0;
             }
-            sum += termFrequencies.getTransformedFrequency(term);
+            sum += termFrequencies.getFrequency(term);
             map.put(term, sum);
         }
     }
 
 
-    private double sumForDocument(DocumentTermFrequencies termFrequencies) {
+    private double sumForDocument(NormalizedTermFrequencies termFrequencies) {
         double result = 0.0;
         for (String word : termFrequencies.getDocument()) {
-            result += termFrequencies.getTransformedFrequency(word);
+            result += termFrequencies.getFrequency(word);
         }
         return result;
     }
 
-    private List<DocumentTermFrequencies> transformTermFrequencies(Collection<Document> documents) {
-        List<DocumentTermFrequencies> transformedDocuments = new ArrayList<>(documents.size());
+    private List<NormalizedTermFrequencies> transformTermFrequencies(Collection<Document> documents) {
+        List<NormalizedTermFrequencies> transformedDocuments = new ArrayList<>(documents.size());
         for (Document document : documents) {
-            transformedDocuments.add(DocumentTermFrequencies.forDocument(document, documents));
+            transformedDocuments.add(NormalizedTermFrequencies.forDocument(document, documents));
         }
         return transformedDocuments;
     }

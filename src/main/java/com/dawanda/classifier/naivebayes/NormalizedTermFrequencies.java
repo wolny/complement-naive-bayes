@@ -2,6 +2,7 @@ package com.dawanda.classifier.naivebayes;
 
 import com.dawanda.classifier.exception.DuplicatedTermException;
 import com.dawanda.document.Document;
+import com.google.common.collect.ImmutableMap;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,17 +17,22 @@ import java.util.Map;
  * <li>document length normalization</li>
  * </ul>
  */
-public class DocumentTermFrequencies {
+public class NormalizedTermFrequencies {
     private final Document document;
-    private final Map<String, Double> transformedTermFrequencies;
+    private final Map<String, Double> termFrequencies;
 
-    private DocumentTermFrequencies(Document document) {
+    private NormalizedTermFrequencies(Document document) {
         this.document = document;
-        transformedTermFrequencies = new HashMap<>();
+        termFrequencies = new HashMap<>();
+    }
+
+    public NormalizedTermFrequencies(Document document, Map<String, Double> termFrequencies) {
+        this.document = document;
+        this.termFrequencies = ImmutableMap.copyOf(termFrequencies);
     }
 
     /**
-     * Creates a {@link DocumentTermFrequencies}
+     * Creates a {@link NormalizedTermFrequencies}
      * for a given document and performs set of transforms for term frequencies.
      * The following transformations are applied:
      * <ul>
@@ -37,11 +43,11 @@ public class DocumentTermFrequencies {
      *
      * @param document  document which term frequencies are to be transformed
      * @param documents all training documents
-     * @return instance of {@link DocumentTermFrequencies}
+     * @return instance of {@link NormalizedTermFrequencies}
      * with term frequencies transformed.
      */
-    public static DocumentTermFrequencies forDocument(Document document, Collection<Document> documents) {
-        DocumentTermFrequencies result = new DocumentTermFrequencies(document);
+    public static NormalizedTermFrequencies forDocument(Document document, Collection<Document> documents) {
+        NormalizedTermFrequencies result = new NormalizedTermFrequencies(document);
         return result
                 .tfTransform()
                 //.idfTransform(documents)
@@ -52,23 +58,23 @@ public class DocumentTermFrequencies {
         return document;
     }
 
-    public double getTransformedFrequency(String word) {
-        return transformedTermFrequencies.get(word);
+    public double getFrequency(String term) {
+        return termFrequencies.get(term);
     }
 
-    private DocumentTermFrequencies tfTransform() {
+    private NormalizedTermFrequencies tfTransform() {
         for (String term : getDocument()) {
-            if (transformedTermFrequencies.containsKey(term)) {
+            if (termFrequencies.containsKey(term)) {
                 String msg = String.format("Term: %s duplicated in document: %s", term, getDocument().getId());
                 throw new DuplicatedTermException(msg);
             }
-            transformedTermFrequencies.put(term, Math.log(document.getWordCount(term) + 1.0));
+            termFrequencies.put(term, Math.log(document.getWordCount(term) + 1.0));
         }
         return this;
     }
 
-    private DocumentTermFrequencies idfTransform(Collection<Document> documents) {
-        for (Map.Entry<String, Double> entry : transformedTermFrequencies.entrySet()) {
+    private NormalizedTermFrequencies idfTransform(Collection<Document> documents) {
+        for (Map.Entry<String, Double> entry : termFrequencies.entrySet()) {
             entry.setValue(entry.getValue() * idfCoeff(entry.getKey(), documents));
         }
         return this;
@@ -87,13 +93,13 @@ public class DocumentTermFrequencies {
         return Math.log(1.0 / sum);
     }
 
-    private DocumentTermFrequencies normalize() {
+    private NormalizedTermFrequencies normalize() {
         double sumOfSquares = 0.0;
-        for (double freq : transformedTermFrequencies.values()) {
+        for (double freq : termFrequencies.values()) {
             sumOfSquares += freq * freq;
         }
         double denominator = Math.sqrt(sumOfSquares);
-        for (Map.Entry<String, Double> entry : transformedTermFrequencies.entrySet()) {
+        for (Map.Entry<String, Double> entry : termFrequencies.entrySet()) {
             entry.setValue(entry.getValue() / denominator);
         }
         return this;
