@@ -1,8 +1,8 @@
 package com.dawanda;
 
 import com.dawanda.classifier.DocumentClassifier;
-import com.dawanda.classifier.LabelingResult;
-import com.dawanda.classifier.naivebayes.NaiveBayesModel;
+import com.dawanda.classifier.naivebayes.labels.LabelResults;
+import com.dawanda.classifier.naivebayes.model.NaiveBayesModel;
 import com.dawanda.classifier.naivebayes.WeightNormalizedComplementNaiveBayes;
 import com.dawanda.document.Document;
 import com.dawanda.utils.Extractors;
@@ -34,10 +34,10 @@ public class ApiUsageExample {
         Document document = Extractors.STANDARD_EXTRACTOR.extractFeatureVector(text);
 
         // label document
-        LabelingResult labelingResult = classifier.label(document);
+        LabelResults labelResults = classifier.label(document);
 
         // get categories ordered by score
-        List<LabelingResult.ScoredCategory> categories = labelingResult.getOrderedCategories();
+        List<LabelResults.ScoredCategory> categories = labelResults.getOrderedCategories();
 
         // print 3 best category suggestions according to the model
         System.out.println(Lists.newArrayList(Iterables.limit(categories, 3)));

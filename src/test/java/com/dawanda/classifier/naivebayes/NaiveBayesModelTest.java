@@ -1,5 +1,6 @@
 package com.dawanda.classifier.naivebayes;
 
+import com.dawanda.classifier.naivebayes.model.NaiveBayesModel;
 import com.dawanda.document.Category;
 import com.dawanda.utils.NaiveBayesSerializer;
 import com.google.common.collect.ImmutableMap;

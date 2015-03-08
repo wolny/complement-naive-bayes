@@ -1,8 +1,6 @@
-package com.dawanda.classifier.naivebayes;
+package com.dawanda.classifier.naivebayes.model;
 
-import com.dawanda.classifier.Model;
 import com.dawanda.document.Category;
-import com.dawanda.utils.NaiveBayesSerializer;
 import com.google.common.collect.ImmutableMap;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;

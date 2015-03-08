@@ -1,5 +1,6 @@
 package com.dawanda.classifier.naivebayes;
 
+import com.dawanda.classifier.naivebayes.model.NaiveBayesModel;
 import com.dawanda.db.Product;
 import com.dawanda.document.Document;
 import com.dawanda.featureextractor.filter.ProductFilterPipeline;

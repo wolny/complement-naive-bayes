@@ -1,4 +1,4 @@
-package com.dawanda.classifier;
+package com.dawanda.classifier.naivebayes.model;
 
 /**
  * Just a marking interface for the model returned by the {@link com.dawanda.classifier.DocumentClassifier}.

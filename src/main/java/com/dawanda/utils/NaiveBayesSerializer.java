@@ -1,6 +1,6 @@
 package com.dawanda.utils;
 
-import com.dawanda.classifier.naivebayes.NaiveBayesModel;
+import com.dawanda.classifier.naivebayes.model.NaiveBayesModel;
 import com.dawanda.document.Category;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;

@@ -1,7 +1,8 @@
 package com.dawanda.classifier.naivebayes;
 
 import com.dawanda.classifier.DocumentClassifier;
-import com.dawanda.classifier.LabelingResult;
+import com.dawanda.classifier.naivebayes.labels.LabelResults;
+import com.dawanda.classifier.naivebayes.model.NaiveBayesModel;
 import com.dawanda.db.Product;
 import com.dawanda.document.Category;
 import com.dawanda.document.Document;
@@ -65,8 +66,8 @@ public class ClassifierValidator {
 
     private void printLabels(DocumentClassifier classifier, List<Document> toBeLabeled, int maxLabels) {
         for (Document document : toBeLabeled) {
-            LabelingResult labelingResult = classifier.label(document);
-            List<LabelingResult.ScoredCategory> topCategories = Lists.newArrayList(Iterables.limit(labelingResult.getOrderedCategories(), maxLabels));
+            LabelResults labelResults = classifier.label(document);
+            List<LabelResults.ScoredCategory> topCategories = Lists.newArrayList(Iterables.limit(labelResults.getOrderedCategories(), maxLabels));
             String result = String.format("Document %s -> %s", document.getId(), topCategories.toString());
             LOG.info(result);
         }
@@ -86,12 +87,12 @@ public class ClassifierValidator {
         Multiset<Category> all = HashMultiset.create();
         LOG.info(String.format("Labeling %d test documents...", testSet.size()));
         for (Document document : testSet) {
-            LabelingResult labelingResult = classifier.label(document);
+            LabelResults labelResults = classifier.label(document);
             Category category = document.getCategory();
             LOG.debug("Expected category: " + category);
-            LOG.debug("Labeling result:" + labelingResult.getOrderedCategories());
+            LOG.debug("Labeling result:" + labelResults.getOrderedCategories());
             all.add(category);
-            if (isCorrectlyLabeled(document, labelingResult)) {
+            if (isCorrectlyLabeled(document, labelResults)) {
                 success.add(category);
             } else {
                 LOG.debug("Incorrect label for document: " + document.getId());
@@ -119,12 +120,12 @@ public class ClassifierValidator {
         LOG.info(">>>> Overall Accuracy = " + acc + " <<<<");
     }
 
-    private boolean isCorrectlyLabeled(final Document document, LabelingResult labelingResult) {
+    private boolean isCorrectlyLabeled(final Document document, LabelResults labelResults) {
         int limit = 3; // take first 3 categories
-        Iterable<LabelingResult.ScoredCategory> topLabels = Iterables.limit(labelingResult.getOrderedCategories(), limit);
-        return Iterables.any(topLabels, new Predicate<LabelingResult.ScoredCategory>() {
+        Iterable<LabelResults.ScoredCategory> topLabels = Iterables.limit(labelResults.getOrderedCategories(), limit);
+        return Iterables.any(topLabels, new Predicate<LabelResults.ScoredCategory>() {
             @Override
-            public boolean apply(LabelingResult.ScoredCategory input) {
+            public boolean apply(LabelResults.ScoredCategory input) {
                 return document.getCategory().equals(input.getCategory());
             }
         });

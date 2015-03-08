@@ -1,4 +1,4 @@
-package com.dawanda.classifier;
+package com.dawanda.classifier.naivebayes.labels;
 
 import com.dawanda.document.Category;
 
@@ -13,11 +13,11 @@ import java.util.Map;
  * <p/>
  * Created by awolny on 07/12/14.
  */
-public class LabelingResult {
+public class LabelResults {
     private final Map<Category, Double> categoryMap;
     private List<ScoredCategory> orderedCategories;
 
-    public LabelingResult(Map<Category, Double> categoryMap) {
+    public LabelResults(Map<Category, Double> categoryMap) {
         this.categoryMap = categoryMap;
     }
 
