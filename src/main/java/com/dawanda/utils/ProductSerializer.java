@@ -11,9 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by awolny on 19/12/14.
- */
 public class ProductSerializer {
     private static final Logger LOG = LoggerFactory.getLogger(ProductSerializer.class);
 

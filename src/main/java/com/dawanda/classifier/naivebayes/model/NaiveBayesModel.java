@@ -7,9 +7,6 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.util.Map;
 
-/**
- * Created by awolny on 07/12/14.
- */
 public class NaiveBayesModel implements Model {
     /**
      * THIS IS THE MODEL: Per each category we're storing the the term weights

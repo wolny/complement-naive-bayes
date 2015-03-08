@@ -1,6 +1,5 @@
 package com.dawanda.featureextractor.tokenizer;
 
-import com.dawanda.utils.CustomStopWords;
 import com.google.common.base.Throwables;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -12,9 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by awolny on 11/12/14.
- */
 public class EnglishLuceneTokenizer implements Tokenizer {
     private final Analyzer analyzer = new StandardAnalyzer();
     //private final Analyzer analyzer = new StandardAnalyzer(CustomStopWords.ENGLISH_STOP_WORDS_SET);

@@ -7,9 +7,6 @@ import com.google.common.collect.Lists;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by awolny on 10/12/14.
- */
 public class RandomSubsetFilter implements ProductFilter {
     private final double fraction;
 

@@ -5,9 +5,6 @@ import org.apache.lucene.analysis.util.CharArraySet;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by awolny on 11/12/14.
- */
 public class CustomStopWords {
     // extracted from http://dev.mysql.com/doc/refman/5.1/en/fulltext-stopwords.html
     private static final List<String> WORDS = Arrays.asList(

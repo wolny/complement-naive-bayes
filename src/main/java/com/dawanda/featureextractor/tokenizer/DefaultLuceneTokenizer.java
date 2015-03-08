@@ -11,9 +11,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by lfundaro on 08/12/14.
- */
 public class DefaultLuceneTokenizer implements Tokenizer {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultLuceneTokenizer.class);
     private final Analyzer analyzer;

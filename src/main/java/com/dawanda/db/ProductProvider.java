@@ -1,8 +1,5 @@
 package com.dawanda.db;
 
-/**
- * Created by awolny on 18/12/14.
- */
 public interface ProductProvider {
     /**
      * Fetches products by category from a given data source (depending on the implementation)

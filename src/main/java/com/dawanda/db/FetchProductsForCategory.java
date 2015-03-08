@@ -78,7 +78,7 @@ public class FetchProductsForCategory implements Runnable {
                 try {
                     conn.close();
                 } catch (SQLException e) {
-                    throw Throwables.propagate(e);
+                    LOG.error("", e);
                 }
             }
         }

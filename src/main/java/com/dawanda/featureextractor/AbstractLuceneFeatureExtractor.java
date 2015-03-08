@@ -14,9 +14,6 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by awolny on 10/12/14.
- */
 public abstract class AbstractLuceneFeatureExtractor implements FeatureExtractor {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractLuceneFeatureExtractor.class);
     private final Tokenizer tokenizer;

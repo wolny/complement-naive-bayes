@@ -5,9 +5,6 @@ import com.dawanda.document.Document;
 
 import java.util.List;
 
-/**
- * Created by awolny on 10/12/14.
- */
 public interface FeatureExtractor {
     /**
      * Converts a given {@code products} to feature vectors

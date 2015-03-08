@@ -3,13 +3,9 @@ package com.dawanda.document;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Created by lfundaro on 08/12/14.
- */
 public class DocumentImpl implements Document {
 
     private final Multiset<String> bagOfWords;

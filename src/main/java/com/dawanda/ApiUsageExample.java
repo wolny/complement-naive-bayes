@@ -1,9 +1,9 @@
 package com.dawanda;
 
 import com.dawanda.classifier.DocumentClassifier;
+import com.dawanda.classifier.naivebayes.WeightNormalizedComplementNaiveBayes;
 import com.dawanda.classifier.naivebayes.labels.LabelResults;
 import com.dawanda.classifier.naivebayes.model.NaiveBayesModel;
-import com.dawanda.classifier.naivebayes.WeightNormalizedComplementNaiveBayes;
 import com.dawanda.document.Document;
 import com.dawanda.utils.Extractors;
 import com.dawanda.utils.NaiveBayesSerializer;
@@ -13,9 +13,6 @@ import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Created by awolny on 19/12/14.
- */
 public class ApiUsageExample {
     public static void main(String[] args) throws IOException {
         // read Naive Bayes model from JSON file

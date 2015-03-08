@@ -23,9 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by awolny on 09/12/14.
- */
 public class ClassifierValidator {
     private static final Logger LOG = LoggerFactory.getLogger(ClassifierValidator.class);
     private final String srcDir;

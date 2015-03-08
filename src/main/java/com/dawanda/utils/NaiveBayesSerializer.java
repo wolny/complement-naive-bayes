@@ -10,9 +10,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by awolny on 10/12/14.
- */
 public class NaiveBayesSerializer {
     public static void writeTo(NaiveBayesModel model, String path) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();

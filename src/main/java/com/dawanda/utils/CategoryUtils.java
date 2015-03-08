@@ -11,9 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by lfundaro on 10/12/14.
- */
 public class CategoryUtils {
     public static Map<String, String> CAT_TO_NAME = CategoryUtils.readCategories();
 

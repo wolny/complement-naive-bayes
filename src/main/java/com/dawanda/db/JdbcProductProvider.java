@@ -17,9 +17,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by awolny on 08/12/14.
- */
 public class JdbcProductProvider implements ProductProvider {
     static final int MAX_THREADS = 32;
     private final List<Integer> categoryIds;

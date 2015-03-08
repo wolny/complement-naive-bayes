@@ -3,9 +3,6 @@ package com.dawanda.db;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * Created by awolny on 17/12/14.
- */
 public class RowToProduct implements RowMapper<Product> {
     private final int categoryId;
 
