@@ -9,9 +9,6 @@ import java.util.Collection;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
 
-/**
- * @author slo
- */
 public class ConcurrentTermFrequencyBuilder extends AbstractTermFrequencyBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(ConcurrentTermFrequencyBuilder.class);
 
@@ -26,7 +23,7 @@ public class ConcurrentTermFrequencyBuilder extends AbstractTermFrequencyBuilder
         LOG.info("Normalizing term frequencies for each of {} documents...", documents.size());
         Document[] documentArray = documents.toArray(new Document[0]);
         NormalizedTermFrequencies[] normalizedFrequencies = new NormalizedTermFrequencies[documentArray.length];
-        TermFrequencyTransformer transformer = new TermFrequencyTransformer(normalizedFrequencies, documentArray, 0, documentArray.length - 1);
+        TermFrequencyTransformer transformer = new TermFrequencyTransformer(normalizedFrequencies, documentArray, 0, documentArray.length);
         pool.invoke(transformer);
         return normalizedFrequencies;
 
@@ -47,9 +44,9 @@ public class ConcurrentTermFrequencyBuilder extends AbstractTermFrequencyBuilder
 
         @Override
         protected void compute() {
-            if (lo == hi) {
+            if (hi - lo <= 1) {
                 Document document = documents[lo];
-                frequencies[lo] = new NormalizedTermFrequencies(document, normalizeTermFrequencies(document));
+                frequencies[lo] = normalizedTermFrequencies(document);
             } else {
                 int mid = (lo + hi) / 2;
                 invokeAll(new TermFrequencyTransformer(frequencies, documents, lo, mid),
@@ -57,5 +54,4 @@ public class ConcurrentTermFrequencyBuilder extends AbstractTermFrequencyBuilder
             }
         }
     }
-
 }

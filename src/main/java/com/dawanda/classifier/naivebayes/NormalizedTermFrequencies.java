@@ -17,10 +17,12 @@ import java.util.Map;
 public class NormalizedTermFrequencies {
     private final Document document;
     private final Map<String, Double> termFrequencies;
+    private final double termFrequencySum;
 
-    public NormalizedTermFrequencies(Document document, Map<String, Double> termFrequencies) {
+    public NormalizedTermFrequencies(Document document, Map<String, Double> termFrequencies, double termFrequencySum) {
         this.document = document;
         this.termFrequencies = ImmutableMap.copyOf(termFrequencies);
+        this.termFrequencySum = termFrequencySum;
     }
 
     public Document getDocument() {
@@ -29,5 +31,9 @@ public class NormalizedTermFrequencies {
 
     public double getFrequency(String term) {
         return termFrequencies.get(term);
+    }
+
+    public double getTermFrequencySum() {
+        return termFrequencySum;
     }
 }

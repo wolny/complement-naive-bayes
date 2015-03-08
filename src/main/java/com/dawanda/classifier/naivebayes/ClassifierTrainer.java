@@ -32,7 +32,7 @@ public class ClassifierTrainer {
 
     public void train() throws IOException {
         LOG.info("Training Complement Naive Bayes...");
-        ProductFilterPipeline filter = new ProductFilterPipeline(Arrays.asList(new RandomSubsetFilter(1.0), new SameSellerFilter(3)));
+        ProductFilterPipeline filter = new ProductFilterPipeline(Arrays.asList(new RandomSubsetFilter(1.0), new SameSellerFilter(4)));
         List<Product> products = filter.filterProducts(srcDir);
         List<Document> documents = Extractors.STANDARD_EXTRACTOR.extractFeatureVectors(products);
         WeightNormalizedComplementNaiveBayes classifier = new WeightNormalizedComplementNaiveBayes();

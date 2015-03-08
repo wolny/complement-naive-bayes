@@ -7,9 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 
-/**
- * @author slo
- */
 public class SimpleTermFrequencyBuilder extends AbstractTermFrequencyBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(SimpleTermFrequencyBuilder.class);
 
@@ -19,7 +16,7 @@ public class SimpleTermFrequencyBuilder extends AbstractTermFrequencyBuilder {
         NormalizedTermFrequencies[] normalizedFrequencies = new NormalizedTermFrequencies[documents.size()];
         int i = 0;
         for (Document document : documents) {
-            normalizedFrequencies[i++] = new NormalizedTermFrequencies(document, normalizeTermFrequencies(document));
+            normalizedFrequencies[i++] = normalizedTermFrequencies(document);
         }
         return normalizedFrequencies;
     }

@@ -7,13 +7,10 @@ import com.google.common.collect.Maps;
 import java.util.Collection;
 import java.util.Map;
 
-/**
- * @author slo
- */
 public abstract class AbstractTermFrequencyBuilder {
     public abstract NormalizedTermFrequencies[] transformTermFrequencies(Collection<Document> documents);
 
-    protected Map<String, Double> normalizeTermFrequencies(Document document) {
+    protected NormalizedTermFrequencies normalizedTermFrequencies(Document document) {
         Map<String, Double> normalizedFrequencies = Maps.newHashMap();
         double sumOfSquares = 0.0;
         for (String term : document) {
@@ -22,9 +19,13 @@ public abstract class AbstractTermFrequencyBuilder {
             sumOfSquares += value * value;
         }
         double denominator = Math.sqrt(sumOfSquares);
+        // normalize and compute sum of term frequencies
+        double termFrequencySum = 0.0;
         for (Map.Entry<String, Double> entry : normalizedFrequencies.entrySet()) {
-            entry.setValue(entry.getValue() / denominator);
+            double normalizedValue = entry.getValue() / denominator;
+            entry.setValue(normalizedValue);
+            termFrequencySum += normalizedValue;
         }
-        return normalizedFrequencies;
+        return new NormalizedTermFrequencies(document, normalizedFrequencies, termFrequencySum);
     }
 }
