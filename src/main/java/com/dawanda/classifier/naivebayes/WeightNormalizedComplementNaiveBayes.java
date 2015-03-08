@@ -6,8 +6,10 @@ import com.dawanda.classifier.naivebayes.labels.LabelResultsBuilder;
 import com.dawanda.classifier.naivebayes.model.AbstractNaiveBayesModelBuilder;
 import com.dawanda.classifier.naivebayes.model.ConcurrentNaiveBayesModelBuilder;
 import com.dawanda.classifier.naivebayes.model.NaiveBayesModel;
+import com.dawanda.classifier.naivebayes.model.SimpleNaiveBayesModelBuilder;
 import com.dawanda.classifier.naivebayes.termfrequency.AbstractTermFrequencyBuilder;
 import com.dawanda.classifier.naivebayes.termfrequency.ConcurrentTermFrequencyBuilder;
+import com.dawanda.classifier.naivebayes.termfrequency.SimpleTermFrequencyBuilder;
 import com.dawanda.document.Document;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
@@ -32,10 +34,15 @@ public class WeightNormalizedComplementNaiveBayes implements DocumentClassifier 
         this.naiveBayesModel = naiveBayesModel;
     }
 
-    public WeightNormalizedComplementNaiveBayes() {
-        ForkJoinPool pool = new ForkJoinPool();
-        termFrequencyBuilder = new ConcurrentTermFrequencyBuilder(pool);//new SimpleTermFrequencyBuilder();
-        naiveBayesModelBuilder = new ConcurrentNaiveBayesModelBuilder(pool);//new SimpleNaiveBayesModelBuilder();
+    public WeightNormalizedComplementNaiveBayes(boolean concurrent) {
+        if (concurrent) {
+            ForkJoinPool pool = new ForkJoinPool();
+            termFrequencyBuilder = new ConcurrentTermFrequencyBuilder(pool);//new SimpleTermFrequencyBuilder();
+            naiveBayesModelBuilder = new ConcurrentNaiveBayesModelBuilder(pool);//new SimpleNaiveBayesModelBuilder();
+        } else {
+            termFrequencyBuilder = new SimpleTermFrequencyBuilder();
+            naiveBayesModelBuilder = new SimpleNaiveBayesModelBuilder();
+        }
     }
 
     @Override

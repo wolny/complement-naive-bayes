@@ -29,6 +29,9 @@ Usage: <main class> [options]
   * -c, --command
        Command for the classifier, can be 'train' for training, 'label' for
        label assignment, or 'validate' for validating the classifier accuracy
+    -m, --multithreaded
+       Use multi-threaded model (true/false)
+       Default: false
     -o, --outputModel
        Output file for the model. Option valid only for training.
        Default: ~/.cbayes/model.json
@@ -39,7 +42,7 @@ Usage: <main class> [options]
        Input directory containing product files for training
        Default: ~/.cbayes/train
 ```
-* put your JSON train product files in _trainDir_ and train your model:
+* put your JSON training product files in _trainDir_ and train your model:
 ```
 java -jar complement-naive-bayes-{version}.jar -c train --trainDir trainDir
 ```
@@ -51,6 +54,8 @@ java -jar complement-naive-bayes-{version}.jar -c validate --testDir testDir
 ```
 java -jar complement-naive-bayes-{version}.jar -c label --testDir testDir
 ```
+
+Important note: because all products need to be loaded in memory for training, make sure to run the app with proper heap size (`-Xmx<memory>`)
 #### JSON product files
 *trainDir*/*testDir* must contain product files in JSON format. Each file must contain list of products with
 the following JSON schema:

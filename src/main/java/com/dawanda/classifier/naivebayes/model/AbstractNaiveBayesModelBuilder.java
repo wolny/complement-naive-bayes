@@ -19,7 +19,7 @@ public abstract class AbstractNaiveBayesModelBuilder {
     public NaiveBayesModel buildNaiveBayesModel(NormalizedTermFrequencies[] normalizedTermFrequencies) {
         LOG.info("Computing per category sums...");
         Map<Category, Double> perClassSum = computePerClassSum(normalizedTermFrequencies);
-        LOG.info("computing per term per category sums...");
+        LOG.info("Computing per term per category sums...");
         Map<Category, Map<String, Double>> perClassPerTermSum = computePerClassPerTermSum(normalizedTermFrequencies);
         LOG.info("Computing term weights...");
         Map<Category, NaiveBayesModel.TermWeights> weights = computeWeights(perClassSum, perClassPerTermSum);

@@ -22,7 +22,7 @@ public class Main {
 
         switch (options.command) {
             case "train":
-                new ClassifierTrainer(options.trainDir, options.outputModel).train();
+                new ClassifierTrainer(options.trainDir, options.outputModel).train(options.concurrent);
                 break;
             case "validate":
                 new ClassifierValidator(options.testDir, options.outputModel).validate();
@@ -48,5 +48,8 @@ public class Main {
 
         @Parameter(names = {"-o", "--outputModel"}, description = "Output file for the model")
         public String outputModel = HOME_DIR + "/.cbayes/model.json";
+
+        @Parameter(names = {"-m", "--multithreaded"}, description = "Use multi-threaded model (true/false)")
+        public boolean concurrent = false;
     }
 }
