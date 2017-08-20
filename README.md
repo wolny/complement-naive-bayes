@@ -2,9 +2,9 @@ complement-naive-bayes
 ======================
 
 Implementation of Complement Naive Bayes text classifier used for automatic categorisation of product listings on eCommerce sites.
-Complement Navie Bayes was chosen over the classic Naive Bayes due to the fact that distribution of products among
-categories tend to be _skewed_ (more products in one category than another), which causes Classic Navie Bayes to
-prefer categories which had more products during the training phase. Complement Navie Bayes performs much better
+Complement Naive Bayes was chosen over the classic Naive Bayes due to the fact that distribution of products among
+categories tend to be _skewed_ (more products in one category than another), which causes Classic Naive Bayes to
+prefer categories which had more products during the training phase. Complement Naive Bayes performs much better
 on skewed training data.
 
 ## Usage
