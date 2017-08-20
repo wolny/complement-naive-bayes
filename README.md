@@ -5,7 +5,7 @@ Implementation of Complement Naive Bayes text classifier used for automatic cate
 Complement Navie Bayes was chosen over the classic Naive Bayes due to the fact that distribution of products among
 categories tend to be _skewed_ (more products in one category than another), which causes Classic Navie Bayes to
 prefer categories which had more products during the training phase. Complement Navie Bayes performs much better
-for skewed data.
+on skewed training data.
 
 ## Usage
 *complement-naive-bayes* might be used as a library which exposes API for traning and labeling of new products 
